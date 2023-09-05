@@ -2,12 +2,14 @@ import 'dart:math';
 import 'package:bmi_calculator/screens/components/alert_bmi.dart';
 import 'package:bmi_calculator/screens/components/table.dart';
 import 'package:flutter/material.dart';
+import 'package:screenshot/screenshot.dart';
 
 String bmiResult = "";
 String bmiCatalog = "";
 String recommendation = "sigue así 👍";
 String statusLabel = "¡Ingresa tus párametros!";
 bool everyFieldIsFilled = false;
+bool isCalculated = false;
 
 void determineBmi(double bmi) {
   bmiResult = bmi.toStringAsFixed(2);
@@ -49,6 +51,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  ScreenshotController screenshotController = ScreenshotController();
+
   final heightController = TextEditingController();
   final weightController = TextEditingController();
 
@@ -66,6 +71,7 @@ class _HomePageState extends State<HomePage> {
     double weight = double.parse(weightValue);
     double bmi = weight / double.parse(pow(height, 2).toString());
     determineBmi(bmi);
+    isCalculated = true;
     setState(() {});
   }
 
@@ -86,63 +92,69 @@ class _HomePageState extends State<HomePage> {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool isDarkModeEnabled = brightness == Brightness.dark;
 
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text("BMI Calculator"),
-          backgroundColor: (isDarkModeEnabled)
-              ? Theme.of(context).primaryColorDark
-              : Theme.of(context).primaryColor,
-          foregroundColor: (isDarkModeEnabled)
-              ? Theme.of(context).primaryColorLight
-              : Theme.of(context).cardColor,
-        ),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-              child: heightField,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-              child: weightField,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-              child: Text(
-                statusLabel,
-                style: TextStyle(
-                    color: (isDarkModeEnabled)
-                        ? Theme.of(context).indicatorColor
-                        : Theme.of(context).primaryColorDark,
-                    fontSize: 16),
+    return Screenshot(
+      controller: screenshotController,
+      child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: const Text("BMI Calculator"),
+            backgroundColor: (isDarkModeEnabled)
+                ? Theme.of(context).primaryColorDark
+                : Theme.of(context).primaryColor,
+            foregroundColor: (isDarkModeEnabled)
+                ? Theme.of(context).primaryColorLight
+                : Theme.of(context).cardColor,
+          ),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                child: heightField,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
-              child: ElevatedButton(
-                  onPressed: () {
-                    calculate();
-                    if (everyFieldIsFilled) {
-                      showAlertDialog(context,
-                          bmiCatalog: "¡Tienes $bmiCatalog!",
-                          bmiResult:
-                              "¡Tu índice es $bmiResult, $recommendation!");
-                    } else {
-                      showAlertDialog(context,
-                          bmiCatalog: "Tienes que llenar los campos",
-                          bmiResult:
-                              "No se pudo determinar tu IMC porque los campos están vacíos");
-                    }
-                  },
-                  child: const Text("Calcular")),
-            ),
-            SizedBox(
-                width: MediaQuery.of(context).size.width * 0.7,
-                child: const BmiTable())
-          ],
-        ));
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                child: weightField,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                child: Text(
+                  statusLabel,
+                  style: TextStyle(
+                      color: (isDarkModeEnabled)
+                          ? Theme.of(context).indicatorColor
+                          : Theme.of(context).primaryColorDark,
+                      fontSize: 16),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+                child: ElevatedButton(
+                    onPressed: () {
+                      calculate();
+                      if (everyFieldIsFilled) {
+                        showAlertDialog(context,
+                            bmiCatalog: "¡Tienes $bmiCatalog!",
+                            bmiResult:
+                                "¡Tu índice es $bmiResult, $recommendation!");
+                        () async{
+                          await screenshotController.capture();
+                        };
+                      } else {
+                        showAlertDialog(context,
+                            bmiCatalog: "Tienes que llenar los campos",
+                            bmiResult:
+                                "No se pudo determinar tu IMC porque los campos están vacíos");
+                      }
+                    },
+                    child: const Text("Calcular")),
+              ),
+              SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  child: const BmiTable())
+            ],
+          )),
+    );
   }
 }
 
