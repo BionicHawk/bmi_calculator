@@ -83,12 +83,19 @@ class _HomePageState extends State<HomePage> {
       textInputController: weightController,
     );
 
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool isDarkModeEnabled = brightness == Brightness.dark;
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
           title: const Text("BMI Calculator"),
-          backgroundColor: Theme.of(context).primaryColor,
-          foregroundColor: Theme.of(context).cardColor,
+          backgroundColor: (isDarkModeEnabled)
+              ? Theme.of(context).primaryColorDark
+              : Theme.of(context).primaryColor,
+          foregroundColor: (isDarkModeEnabled)
+              ? Theme.of(context).primaryColorLight
+              : Theme.of(context).cardColor,
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -106,7 +113,10 @@ class _HomePageState extends State<HomePage> {
               child: Text(
                 statusLabel,
                 style: TextStyle(
-                    color: Theme.of(context).primaryColorDark, fontSize: 16),
+                    color: (isDarkModeEnabled)
+                        ? Theme.of(context).indicatorColor
+                        : Theme.of(context).primaryColorDark,
+                    fontSize: 16),
               ),
             ),
             Padding(

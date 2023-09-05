@@ -10,10 +10,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
+    var brightness = MediaQuery.of(context).platformBrightness;
     return MaterialApp(
       title: "BMI Calculator",
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData(
+          useMaterial3: true,
+          brightness: (brightness == Brightness.light)
+              ? Brightness.light
+              : Brightness.dark),
       debugShowCheckedModeBanner: false,
       home: const HomePage(),
     );

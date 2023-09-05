@@ -5,9 +5,14 @@ class BmiTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool isDarkModeEnabled = brightness == Brightness.dark;
+
     return Table(
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      border: TableBorder.all(),
+      border: TableBorder.all(
+          color:
+              (isDarkModeEnabled) ? Colors.white30 : Colors.blueGrey.shade300),
       children: const [
         TableRow(children: [
           ListedElement(value: "Menor a 16"),
