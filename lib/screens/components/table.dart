@@ -5,7 +5,6 @@ class BmiTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double paddingValue = 5.0;
     return Table(
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       border: TableBorder.all(),

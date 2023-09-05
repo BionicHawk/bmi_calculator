@@ -1,14 +1,18 @@
 import 'dart:math';
+import 'package:bmi_calculator/screens/components/alert_bmi.dart';
 import 'package:bmi_calculator/screens/components/table.dart';
 import 'package:flutter/material.dart';
 
 String bmiResult = "";
 String bmiCatalog = "";
+String recommendation = "sigue así 👍";
 String statusLabel = "¡Ingresa tus párametros!";
+bool everyFieldIsFilled = false;
 
 void determineBmi(double bmi) {
   bmiResult = bmi.toStringAsFixed(2);
-
+  recommendation =
+      "te recomendamos que visites a un espacialista en nutrición para tener una salud mejor 👩‍⚕️";
   bmiCatalog = "Delgadez Severa";
   if (bmi >= 16.0) {
     bmiCatalog = "Delgadez Moderada";
@@ -18,9 +22,12 @@ void determineBmi(double bmi) {
   }
   if (bmi >= 18.5) {
     bmiCatalog = "Peso Normal";
+    recommendation = "sigue así 👍";
   }
   if (bmi >= 25.0) {
     bmiCatalog = "Sobrepeso";
+    recommendation =
+        "te recomendamos que visites a un espacialista en nutrición para tener una salud mejor 👩‍⚕️";
   }
   if (bmi >= 30.0) {
     bmiCatalog = "Obesidad tipo I";
@@ -50,9 +57,11 @@ class _HomePageState extends State<HomePage> {
     String weightValue = weightController.text;
     if (heightValue.isEmpty || weightValue.isEmpty) {
       statusLabel = "¡Ingresa tus párametros!";
+      everyFieldIsFilled = false;
       setState(() {});
       return;
     }
+    everyFieldIsFilled = true;
     double height = double.parse(heightValue);
     double weight = double.parse(weightValue);
     double bmi = weight / double.parse(pow(height, 2).toString());
@@ -103,7 +112,21 @@ class _HomePageState extends State<HomePage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
               child: ElevatedButton(
-                  onPressed: calculate, child: const Text("Calcular")),
+                  onPressed: () {
+                    calculate();
+                    if (everyFieldIsFilled) {
+                      showAlertDialog(context,
+                          bmiCatalog: "¡Tienes $bmiCatalog!",
+                          bmiResult:
+                              "¡Tu índice es $bmiResult, $recommendation!");
+                    } else {
+                      showAlertDialog(context,
+                          bmiCatalog: "Tienes que llenar los campos",
+                          bmiResult:
+                              "No se pudo determinar tu IMC porque los campos están vacíos");
+                    }
+                  },
+                  child: const Text("Calcular")),
             ),
             SizedBox(
                 width: MediaQuery.of(context).size.width * 0.7,
