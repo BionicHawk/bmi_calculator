@@ -15,9 +15,11 @@ bool isCalculated = false;
 void determineBmi(double bmi) {
   bmiResult = bmi.toStringAsFixed(2);
   recommendation =
-      "te recomendamos que visites a un espacialista en nutrición para tener una salud mejor 👩‍⚕️";
+      "tienes muchos factores de riesgo en tu contra, es necesario que realices una visita al médico lo más pronto posible 😰";
   bmiCatalog = "Delgadez Severa";
   if (bmi >= 16.0) {
+    recommendation =
+        "te recomendamos que visites a un espacialista en nutrición para tener una salud mejor 👩‍⚕️";
     bmiCatalog = "Delgadez Moderada";
   }
   if (bmi >= 17.0) {
@@ -39,6 +41,8 @@ void determineBmi(double bmi) {
     bmiCatalog = "Obesidad tipo II";
   }
   if (bmi >= 40.0) {
+    recommendation =
+        "tienes muchos factores de riesgo en tu contra, es necesario que realices una visita al médico lo más pronto posible 😰";
     bmiCatalog = "Obesidad tipo III";
   }
   statusLabel = "Tienes $bmiCatalog, tu IMC es $bmiResult";
@@ -52,7 +56,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   ScreenshotController screenshotController = ScreenshotController();
 
   final heightController = TextEditingController();
@@ -105,23 +108,24 @@ class _HomePageState extends State<HomePage> {
             foregroundColor: (isDarkModeEnabled)
                 ? Theme.of(context).primaryColorLight
                 : Theme.of(context).cardColor,
-            actions: [
-              ShareButton(screenshotController: screenshotController)
-            ],
+            actions: [ShareButton(screenshotController: screenshotController)],
           ),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                 child: heightField,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                 child: weightField,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                 child: Text(
                   statusLabel,
                   style: TextStyle(
@@ -132,7 +136,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 0, vertical: 20),
                 child: ElevatedButton(
                     onPressed: () {
                       calculate();
