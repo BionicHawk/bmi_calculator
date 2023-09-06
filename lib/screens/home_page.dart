@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:bmi_calculator/screens/components/alert_bmi.dart';
+import 'package:bmi_calculator/screens/components/share_button.dart';
 import 'package:bmi_calculator/screens/components/table.dart';
 import 'package:flutter/material.dart';
 import 'package:screenshot/screenshot.dart';
@@ -104,6 +105,9 @@ class _HomePageState extends State<HomePage> {
             foregroundColor: (isDarkModeEnabled)
                 ? Theme.of(context).primaryColorLight
                 : Theme.of(context).cardColor,
+            actions: [
+              ShareButton(screenshotController: screenshotController)
+            ],
           ),
           body: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -137,9 +141,6 @@ class _HomePageState extends State<HomePage> {
                             bmiCatalog: "¡Tienes $bmiCatalog!",
                             bmiResult:
                                 "¡Tu índice es $bmiResult, $recommendation!");
-                        () async{
-                          await screenshotController.capture();
-                        };
                       } else {
                         showAlertDialog(context,
                             bmiCatalog: "Tienes que llenar los campos",

@@ -2,7 +2,10 @@ import "package:bmi_calculator/screens/home_page.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 
-void main() => runApp(const MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
